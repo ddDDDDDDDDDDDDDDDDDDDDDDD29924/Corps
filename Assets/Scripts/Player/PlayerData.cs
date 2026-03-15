@@ -20,8 +20,8 @@ public class PlayerData : ScriptableObject
 
     [Header("Dragging")]
     [Min(1f)] public float dragRange = 3f;
-    [Min(0f)] public float dragMinDistance = 1f;
-    [Min(0f)] public float dragMaxDistance = 3f;
+    [Min(1f)] public float dragMinDistance = 1f;
     [Min(1f)] public float dragSensitivity = 1f;
     [Min(0f)] public float dragDelay = 0.05f;
+    [Min(1f)] public float dragSpeed = 5f;
 }
