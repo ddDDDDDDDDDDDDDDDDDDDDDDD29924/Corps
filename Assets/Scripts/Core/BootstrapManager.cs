@@ -23,6 +23,7 @@ public class BootstrapManager : MonoBehaviour
         CreateSceneLoader();
         CreateEventBus();
         CreateInputManager();
+        CreateScreenManager();
 
         // Переходим в главное меню
         SceneLoader.Instance.Load(SceneNames.Menu);
@@ -88,6 +89,21 @@ public class BootstrapManager : MonoBehaviour
         {
             Debug.LogError("Failed to load InputActionAsset from Resources/InputSystem_Actions");
         }
+
+        DontDestroyOnLoad(go);
+    }
+
+    private void CreateScreenManager()
+    {
+        ScreenManager existing = FindFirstObjectByType<ScreenManager>();
+        if (existing != null)
+        {
+            DontDestroyOnLoad(existing.gameObject);
+            return;
+        }
+
+        GameObject go = new GameObject("ScreenManager");
+        ScreenManager screenManager = go.AddComponent<ScreenManager>();
 
         DontDestroyOnLoad(go);
     }

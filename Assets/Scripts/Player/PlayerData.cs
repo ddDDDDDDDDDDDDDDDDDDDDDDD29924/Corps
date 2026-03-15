@@ -18,5 +18,10 @@ public class PlayerData : ScriptableObject
     [Min(0f)] public float acceleration = 10f;
     [Min(0f)] public float rotationSpeed = 720f; // Degrees per second
 
-
+    [Header("Dragging")]
+    [Min(1f)] public float dragRange = 3f;
+    [Min(0f)] public float dragMinDistance = 1f;
+    [Min(0f)] public float dragMaxDistance = 3f;
+    [Min(1f)] public float dragSensitivity = 1f;
+    [Min(0f)] public float dragDelay = 0.05f;
 }

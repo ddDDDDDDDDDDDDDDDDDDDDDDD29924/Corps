@@ -21,20 +21,25 @@ public class InputManager : MonoBehaviour
     private InputAction crouchAction;
     private InputAction pauseAction;
     private InputAction cancelAction;
+    private InputAction dragAction;
+    private InputAction scrollAction;
 
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
+    public float ScrollInput { get; private set; }
     public bool JumpPressed { get; private set; }
     public bool AttackPressed { get; private set; }
     public bool InteractPressed { get; private set; }
     public bool SprintHeld { get; private set; }
     public bool CrouchHeld { get; private set; }
+    public bool DragHeld { get; private set; }
 
     public System.Action OnJumpPressed;
     public System.Action OnAttackPressed;
     public System.Action OnInteractPressed;
     public System.Action OnPausePressed;
     public System.Action OnCancelPressed;
+    public System.Action OnDragPressed;
 
     private void Awake()
     {
@@ -78,6 +83,8 @@ public class InputManager : MonoBehaviour
         sprintAction = playerActionMap.FindAction("Sprint");
         crouchAction = playerActionMap.FindAction("Crouch");
         pauseAction = playerActionMap.FindAction("Pause");
+        dragAction = playerActionMap.FindAction("Drag");
+        scrollAction = playerActionMap.FindAction("Scroll");
         if (uiActionMap != null)
             cancelAction = uiActionMap.FindAction("Cancel");
 
@@ -91,7 +98,8 @@ public class InputManager : MonoBehaviour
             pauseAction.performed += OnPausePerformed;
         if (cancelAction != null)
             cancelAction.performed += OnCancelPerformed;
-
+        if (dragAction != null)
+            dragAction.performed += OnDragPerformed;
         EnablePlayerInput();
     }
 
@@ -131,6 +139,8 @@ public class InputManager : MonoBehaviour
             pauseAction.performed -= OnPausePerformed;
         if (cancelAction != null)
             cancelAction.performed -= OnCancelPerformed;
+        if (dragAction != null)
+            dragAction.performed -= OnDragPerformed;
     }
 
     private void Update()
@@ -144,6 +154,8 @@ public class InputManager : MonoBehaviour
         LookInput = lookAction != null ? lookAction.ReadValue<Vector2>() : Vector2.zero;
         SprintHeld = sprintAction != null && sprintAction.IsPressed();
         CrouchHeld = crouchAction != null && crouchAction.IsPressed();
+        DragHeld = dragAction != null && dragAction.IsPressed();
+        ScrollInput = scrollAction != null ? scrollAction.ReadValue<float>() : 0f;
     }
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
@@ -173,11 +185,17 @@ public class InputManager : MonoBehaviour
         OnCancelPressed?.Invoke();
     }
 
+    private void OnDragPerformed(InputAction.CallbackContext context)
+    {
+        OnDragPressed?.Invoke();
+    }
+
     public void ResetButtonFlags()
     {
         JumpPressed = false;
         AttackPressed = false;
         InteractPressed = false;
+        DragHeld = false;
     }
 
     public void EnablePlayerInput()
@@ -245,5 +263,10 @@ public class InputManager : MonoBehaviour
     public bool IsCrouchHeld()
     {
         return CrouchHeld;
+    }
+
+    public bool IsDragHeld()
+    {
+        return DragHeld;
     }
 }
