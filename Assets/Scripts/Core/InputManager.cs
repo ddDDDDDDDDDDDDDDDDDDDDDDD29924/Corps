@@ -39,7 +39,6 @@ public class InputManager : MonoBehaviour
     public System.Action OnInteractPressed;
     public System.Action OnPausePressed;
     public System.Action OnCancelPressed;
-    public System.Action OnDragPressed;
 
     private void Awake()
     {
@@ -98,8 +97,8 @@ public class InputManager : MonoBehaviour
             pauseAction.performed += OnPausePerformed;
         if (cancelAction != null)
             cancelAction.performed += OnCancelPerformed;
-        if (dragAction != null)
-            dragAction.performed += OnDragPerformed;
+        //if (dragAction != null)
+        //    dragAction.performed += OnDragPerformed;
         EnablePlayerInput();
     }
 
@@ -139,8 +138,6 @@ public class InputManager : MonoBehaviour
             pauseAction.performed -= OnPausePerformed;
         if (cancelAction != null)
             cancelAction.performed -= OnCancelPerformed;
-        if (dragAction != null)
-            dragAction.performed -= OnDragPerformed;
     }
 
     private void Update()
@@ -183,11 +180,6 @@ public class InputManager : MonoBehaviour
     private void OnCancelPerformed(InputAction.CallbackContext context)
     {
         OnCancelPressed?.Invoke();
-    }
-
-    private void OnDragPerformed(InputAction.CallbackContext context)
-    {
-        OnDragPressed?.Invoke();
     }
 
     public void ResetButtonFlags()

@@ -1,9 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
 
 public class DragTarget : MonoBehaviour
 {
@@ -41,7 +37,7 @@ public class DragTarget : MonoBehaviour
                 string tag = hit.collider.gameObject.tag;
 
                 Debug.Log($"Raycast hit: {hit.collider.gameObject.name}, Tag: {tag}, Renderer: {(renderer != null ? "Yes" : "No")}");
-                Debug.DrawRay(transform.position, direction * hit.distance, Color.red);
+                Debug.DrawRay(transform.position, direction * hit.distance, Color.green);
 
                 if (renderer != null && tag == "Dragable")
                 {
