@@ -40,6 +40,9 @@ public class InputManager : MonoBehaviour
     public System.Action OnPausePressed;
     public System.Action OnCancelPressed;
 
+    public System.Action OnDragPressed;
+    public System.Action OnDragUnpressed;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -97,8 +100,14 @@ public class InputManager : MonoBehaviour
             pauseAction.performed += OnPausePerformed;
         if (cancelAction != null)
             cancelAction.performed += OnCancelPerformed;
-        //if (dragAction != null)
-        //    dragAction.performed += OnDragPerformed;
+
+        // Обновлённая логика: используем started/canceled для надёжного отслеживания удержания
+        if (dragAction != null)
+        {
+            dragAction.started += OnDragStarted;
+            dragAction.canceled += OnDragCanceled;
+        }
+
         EnablePlayerInput();
     }
 
@@ -138,6 +147,12 @@ public class InputManager : MonoBehaviour
             pauseAction.performed -= OnPausePerformed;
         if (cancelAction != null)
             cancelAction.performed -= OnCancelPerformed;
+
+        if (dragAction != null)
+        {
+            dragAction.started -= OnDragStarted;
+            dragAction.canceled -= OnDragCanceled;
+        }
     }
 
     private void Update()
@@ -152,8 +167,8 @@ public class InputManager : MonoBehaviour
         SprintHeld = sprintAction != null && sprintAction.IsPressed();
         CrouchHeld = crouchAction != null && crouchAction.IsPressed();
         DragHeld = dragAction != null && dragAction.IsPressed();
-        ScrollInput = scrollAction != null ? scrollAction.ReadValue<float>() : 0f;
     }
+
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
         JumpPressed = true;
@@ -180,6 +195,18 @@ public class InputManager : MonoBehaviour
     private void OnCancelPerformed(InputAction.CallbackContext context)
     {
         OnCancelPressed?.Invoke();
+    }
+
+    private void OnDragStarted(InputAction.CallbackContext context)
+    {
+        DragHeld = true;
+        OnDragPressed?.Invoke();
+    }
+
+    private void OnDragCanceled(InputAction.CallbackContext context)
+    {
+        DragHeld = false;
+        OnDragUnpressed?.Invoke();
     }
 
     public void ResetButtonFlags()

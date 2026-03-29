@@ -22,53 +22,13 @@ public class DragTarget : MonoBehaviour
         if (InputManager.Instance == null || GameManager.Instance.CurrentGameState != GameState.Playing)
             return;
 
-        Vector3 direction = transform.forward;
-
         if (InputManager.Instance.IsDragHeld())
         {
-            StartCoroutine(DragObject());
-
-            Ray ray = new Ray(transform.position, direction);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, DragRange, ~ignoreLayers))
-            {
-                Renderer renderer = hit.collider.GetComponent<Renderer>();
-                string tag = hit.collider.gameObject.tag;
-
-                Debug.Log($"Raycast hit: {hit.collider.gameObject.name}, Tag: {tag}, Renderer: {(renderer != null ? "Yes" : "No")}");
-                Debug.DrawRay(transform.position, direction * hit.distance, Color.green);
-
-                if (renderer != null && tag == "Dragable")
-                {
-                    targetObject = hit.collider.gameObject;
-                    Debug.Log($"Target object set to: {targetObject.name}");
-                }
-            }
-
-            if (targetObject != null)
-            {
-                direction = transform.forward;
-                float distance = Vector3.Distance(transform.position, targetObject.transform.position);
-
-                targetPoint = transform.position + direction * distance;
-
-                if (targetObject.transform.position == targetPoint)
-                {
-                    isDragging = false;
-                }
-            }
-            Debug.Log("Dragging: " + (targetObject != null ? targetObject.name : "None"));
+            Debug.Log("Drag is held.");
         }
         else
         {
-            if (targetObject != null)
-                targetObject = null;
-            if (isDragging)
-                isDragging = false;
-            StopCoroutine(DragObject());
-
-            Debug.Log("Drag released. Target object cleared.");
+            Debug.Log("Drag is not held.");
         }
     }
 
