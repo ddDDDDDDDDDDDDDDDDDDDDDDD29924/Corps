@@ -214,7 +214,7 @@ public class InputManager : MonoBehaviour
         JumpPressed = false;
         AttackPressed = false;
         InteractPressed = false;
-        DragHeld = false;
+        //DragHeld = false;
     }
 
     public void EnablePlayerInput()

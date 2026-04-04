@@ -672,7 +672,7 @@ GameObject:
   - component: {fileID: 401304984}
   - component: {fileID: 401304983}
   - component: {fileID: 401304982}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Dragable
   m_Icon: {fileID: 0}
@@ -1887,9 +1887,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 1654b60e03697d04c8bca96ea8419332, type: 2}
-  ignoreLayers:
+  Layers:
     serializedVersion: 2
-    m_Bits: 4
+    m_Bits: 1024
 --- !u!1 &1671398170
 GameObject:
   m_ObjectHideFlags: 0
