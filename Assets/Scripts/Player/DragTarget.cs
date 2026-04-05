@@ -1,8 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.SocialPlatforms;
-using Unity.VisualScripting;
 
 public class DragTarget : MonoBehaviour
 {
@@ -13,9 +10,7 @@ public class DragTarget : MonoBehaviour
 
     private bool isDragging = false;
 
-    private float DragDistance;
-
-    private Vector3 targetPoint;
+    private float DragDistance = 0f;
 
     public LayerMask Layers;
 
@@ -25,14 +20,6 @@ public class DragTarget : MonoBehaviour
     private float DragDelay => playerData.dragDelay;
     private float DragSpeed => playerData.dragSpeed;
 
-
-    bool hasLogged = false;
-
-    private void Awake()
-    {
-        DragDistance = DragRange;
-    }
-
     private void Update()
     {
         if (InputManager.Instance == null || GameManager.Instance.CurrentGameState != GameState.Playing)
@@ -40,8 +27,6 @@ public class DragTarget : MonoBehaviour
 
         if (InputManager.Instance.IsDragHeld())
         {
-            StartCoroutine(DragObject());
-
             float rayDistance = DragRange;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -50,46 +35,36 @@ public class DragTarget : MonoBehaviour
                 if (targetObject == null)
                 {
                     targetObject = hit.collider.gameObject;
-                    DragDistance = Vector3.Distance(Camera.main.transform.position, hit.collider.gameObject.transform.position);
+                }
+                if (DragDistance == 0f)
+                {
+                    DragDistance += Vector3.Distance(Camera.main.transform.position, hit.collider.gameObject.transform.position);
                 }
             }
 
-            targetPoint = Camera.main.transform.forward * DragDistance + Camera.main.transform.position;
+            Vector3 targetPoint = ray.direction * Mathf.Clamp(DragDistance, DragMinDistance, DragRange) + Camera.main.transform.position;
+
+            TranslateObject(targetPoint);
         }
         else
         {
-            StopCoroutine(DragObject());
-
             DragDistance = DragRange;
             targetObject = null;
-            targetPoint = Vector3.zero;
         }
     }
 
-    private void AdvancedDebugLog(string message)
+    private void TranslateObject(Vector3 targetPoint)
     {
-        if (!hasLogged)
+        if (targetObject != null)
         {
-            Debug.Log(message);
-            hasLogged = true;
-        }
-    }
-
-    private IEnumerator DragObject()
-    {
-        while (true)
-        {
-            if (targetObject == null || targetPoint == null || !InputManager.Instance.IsDragHeld())
-                yield break;
-
             if (targetObject.transform.position != targetPoint)
             {
-                Vector3 direction = (targetPoint - targetObject.transform.position).normalized;
+                Vector3 direction = (targetObject.transform.position - targetPoint).normalized;
 
                 if (!isDragging)
                 {
                     isDragging = true;
-                    yield return new WaitForSeconds(DragDelay);
+                    StartCoroutine(Wait(DragDelay));
                 }
 
                 targetObject.transform.Translate(direction * DragSpeed * Time.deltaTime);
@@ -99,5 +74,16 @@ public class DragTarget : MonoBehaviour
                 isDragging = false;
             }
         }
+        else
+        {
+            Debug.Log("Target object is null");
+            isDragging = false;
+        }
+    }
+
+    private IEnumerator Wait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        Debug.Log("Waited for " + seconds + " seconds.");
     }
 }
