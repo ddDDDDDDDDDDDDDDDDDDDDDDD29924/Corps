@@ -5,7 +5,7 @@ public class CameraTargetController : MonoBehaviour
     [Header("Mouse Settings")]
     [SerializeField] private float mouseSensitivity = 0.3f;
     [SerializeField] private float minVerticalAngle = -30f;
-    [SerializeField] private float maxVerticalAngle = 60f;
+    [SerializeField] private float maxVerticalAngle = 90f;
 
     [Header("State")]
     [SerializeField] private float currentYaw = 0f;    // Y

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class DragTarget : MonoBehaviour
 {
@@ -14,13 +15,17 @@ public class DragTarget : MonoBehaviour
 
     public LayerMask Layers;
 
+    [SerializeField] private GameObject Floor;
+
+    Rigidbody rb;
+
     private float DragRange => playerData.dragRange;
     private float DragMinDistance => playerData.dragMinDistance;
     private float DragSensitivity => playerData.dragSensitivity;
     private float DragDelay => playerData.dragDelay;
     private float DragSpeed => playerData.dragSpeed;
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (InputManager.Instance == null || GameManager.Instance.CurrentGameState != GameState.Playing)
             return;
@@ -35,19 +40,22 @@ public class DragTarget : MonoBehaviour
                 if (targetObject == null)
                 {
                     targetObject = hit.collider.gameObject;
+                    rb = targetObject.GetComponent<Rigidbody>();
                 }
                 if (DragDistance == 0f)
                 {
-                    DragDistance += Vector3.Distance(Camera.main.transform.position, hit.collider.gameObject.transform.position);
+                    DragDistance = Vector3.Distance(Camera.main.transform.position, hit.collider.gameObject.transform.position);
                 }
             }
 
-            Vector3 targetPoint = ray.direction * Mathf.Clamp(DragDistance, DragMinDistance, DragRange) + Camera.main.transform.position;
+            rb.useGravity = false;
+            Vector3 targetPoint = Camera.main.transform.forward * Mathf.Clamp(DragDistance, DragMinDistance, DragRange) + Camera.main.transform.position;
 
             TranslateObject(targetPoint);
         }
         else
         {
+            rb.useGravity = true;
             DragDistance = DragRange;
             targetObject = null;
         }
@@ -57,17 +65,23 @@ public class DragTarget : MonoBehaviour
     {
         if (targetObject != null)
         {
+            if (rb == null)
+            {
+                Debug.LogWarning("Target object does not have a Rigidbody component.");
+                return;
+            }
+
             if (targetObject.transform.position != targetPoint)
             {
-                Vector3 direction = (targetObject.transform.position - targetPoint).normalized;
-
                 if (!isDragging)
                 {
                     isDragging = true;
                     StartCoroutine(Wait(DragDelay));
                 }
-
-                targetObject.transform.Translate(direction * DragSpeed * Time.deltaTime);
+                
+                float yAxis = Floor.transform.position.y + targetObject.transform.localScale.y / 2f;
+                Vector3 p = new Vector3(targetPoint.x, Mathf.Clamp(targetPoint.y, yAxis, 10000f), targetPoint.z);
+                rb.MovePosition(p);
             }
             else
             {
@@ -76,7 +90,6 @@ public class DragTarget : MonoBehaviour
         }
         else
         {
-            Debug.Log("Target object is null");
             isDragging = false;
         }
     }
