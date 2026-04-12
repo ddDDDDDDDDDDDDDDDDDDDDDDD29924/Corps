@@ -55,9 +55,12 @@ public class DragTarget : MonoBehaviour
         }
         else
         {
-            rb.useGravity = true;
-            DragDistance = DragRange;
-            targetObject = null;
+            if (targetObject != null)
+            {
+                rb.useGravity = true;
+                DragDistance = 0f;
+                targetObject = null;
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class ScreenManager : MonoBehaviour
 {
     public static ScreenManager Instance { get; private set; }
@@ -23,12 +24,12 @@ public class ScreenManager : MonoBehaviour
         if (GameManager.Instance.CurrentGameState == GameState.Playing)
         {
             SetCursorLockState(CursorLockMode.Locked);
-            //SetCursorVisibility(false);
+            SetCursorVisibility(false);
         }
         else
         {
             SetCursorLockState(CursorLockMode.None);
-            //SetCursorVisibility(true);
+            SetCursorVisibility(true);
         }
     }
 
