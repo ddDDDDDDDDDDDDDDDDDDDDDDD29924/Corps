@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953118f386113764b812c997f59366ee, type: 3}
+  m_Name: RedBlock_BlueBlock
+  m_EditorClassIdentifier: 
+  IngredientA: {fileID: 3141424704184807218, guid: 22d38873a8d652349b7d833d034629a7, type: 3}
+  IngredientB: {fileID: 6154843735752293015, guid: 8f537ddcf6622f644897dee4511b430a, type: 3}
+  Result: {fileID: 2325327869121997123, guid: f2fb78ccd1d2c8447a209cc039575151, type: 3}

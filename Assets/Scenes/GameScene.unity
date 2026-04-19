@@ -2075,6 +2075,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1346038098}
   m_CullTransparentMesh: 1
+--- !u!1 &1404185388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1404185390}
+  - component: {fileID: 1404185389}
+  m_Layer: 0
+  m_Name: RecipeStorage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1404185389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404185388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa58dec8f8226ec43b4b8950e7c98984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RecipeDatas:
+  - {fileID: 11400000, guid: fcbe4655ba7bc524189311e82b9b91e8, type: 2}
+  Worktable: {fileID: 800753658}
+  CombineRange: 2
+--- !u!4 &1404185390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404185388}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.364616, y: 15.353065, z: -23.239523}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1433560191
 GameObject:
   m_ObjectHideFlags: 0
@@ -3025,3 +3073,4 @@ SceneRoots:
   - {fileID: 1433560195}
   - {fileID: 1989063957}
   - {fileID: 800753661}
+  - {fileID: 1404185390}
