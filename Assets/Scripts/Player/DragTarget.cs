@@ -41,6 +41,7 @@ public class DragTarget : MonoBehaviour
                 {
                     targetObject = hit.collider.gameObject;
                     rb = targetObject.GetComponent<Rigidbody>();
+                    rb.useGravity = false;
                 }
                 if (DragDistance == 0f)
                 {
@@ -48,7 +49,6 @@ public class DragTarget : MonoBehaviour
                 }
             }
 
-            rb.useGravity = false;
             Vector3 targetPoint = Camera.main.transform.forward * Mathf.Clamp(DragDistance, DragMinDistance, DragRange) + Camera.main.transform.position;
 
             TranslateObject(targetPoint);

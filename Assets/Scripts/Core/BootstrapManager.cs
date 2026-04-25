@@ -26,7 +26,7 @@ public class BootstrapManager : MonoBehaviour
         CreateSceneLoader();
         CreateEventBus();
         CreateInputManager();
-
+        CreateScreenManager();  
     }
 
     private void Start()
@@ -119,6 +119,21 @@ public class BootstrapManager : MonoBehaviour
             Debug.LogError("InputManager: Не удалось загрузить InputSystem_Actions! " +
                 "Убедитесь, что файл InputSystem_Actions.inputactions лежит в папке Assets/Resources/");
         }
+
+        DontDestroyOnLoad(go);
+    }
+
+    private void CreateScreenManager()
+    {
+        ScreenManager existing = FindFirstObjectByType<ScreenManager>();
+        if (existing != null)
+        {
+            DontDestroyOnLoad(existing.gameObject);
+            return;
+        }
+
+        GameObject go = new GameObject("ScreenManager");
+        ScreenManager screenManager = go.AddComponent<ScreenManager>();
 
         DontDestroyOnLoad(go);
     }

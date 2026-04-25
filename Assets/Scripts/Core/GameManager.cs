@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Текущее состояние игры (меню / игра / пауза).
     /// </summary>
-    public GameState CurrentState { get; private set; } = GameState.Menu;
+    public GameState CurrentGameState { get; private set; } = GameState.Menu;
 
     /// <summary>
     /// Инициализация Singleton и закрепление объекта между сценами.
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        CurrentState = GameState.Playing;
+        CurrentGameState = GameState.Playing;
         Time.timeScale = 1f;
         SceneLoader.Instance.LoadWithLoading(SceneNames.GameScene);
         Debug.Log("Game started");
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GoToMenu()
     {
-        CurrentState = GameState.Menu;
+        CurrentGameState = GameState.Menu;
         Time.timeScale = 1f;
         SceneLoader.Instance.Load(SceneNames.Menu);
         Debug.Log("Go to Main Menu");
@@ -63,10 +63,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Pause()
     {
-        if (CurrentState != GameState.Playing)
+        if (CurrentGameState != GameState.Playing)
             return;
 
-        CurrentState = GameState.Paused;
+        CurrentGameState = GameState.Paused;
         Time.timeScale = 0f; // простой вариант паузы
         EventBus.Instance.RaiseGamePaused();
         Debug.Log("Game paused");
@@ -78,10 +78,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Resume()
     {
-        if (CurrentState != GameState.Paused)
+        if (CurrentGameState != GameState.Paused)
             return;
 
-        CurrentState = GameState.Playing;
+        CurrentGameState = GameState.Playing;
         Time.timeScale = 1f;
         EventBus.Instance.RaiseGameResumed();
         Debug.Log("Game resumed");
