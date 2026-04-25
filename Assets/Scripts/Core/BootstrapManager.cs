@@ -1,12 +1,15 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class BootstrapManager : MonoBehaviour
 {
     // Защита от повторной инициализации, если Bootstrap загрузится повторно
     private static bool _initialized;
 
+    /// <summary>
+    /// Гарантирует, что Bootstrap выполнится только один раз и поднимет основные менеджеры.
+    /// </summary>
     private void Awake()
     {
         if (_initialized)
@@ -23,12 +26,25 @@ public class BootstrapManager : MonoBehaviour
         CreateSceneLoader();
         CreateEventBus();
         CreateInputManager();
-        CreateScreenManager();
 
-        // Переходим в главное меню
-        SceneLoader.Instance.Load(SceneNames.Menu);
     }
 
+    private void Start()
+    {
+        // Стартовый flow урока: Bootstrap -> Loading -> MainMenu.
+        SceneLoader.Instance.LoadWithLoading(SceneNames.Menu, PreloadBeforeMainMenu);
+    }
+
+    private IEnumerator PreloadBeforeMainMenu()
+    {
+        // Простая точка расширения: сюда добавляем обязательную подгрузку
+        // (настройки, сохранения, локализация и т.п.) по мере роста проекта.
+        yield return null;
+    }
+
+    /// <summary>
+    /// Создаёт GameManager, если его ещё нет в сцене, и помечает как DontDestroyOnLoad.
+    /// </summary>
     private static void CreateGameManager()
     {
         GameManager existing = FindFirstObjectByType<GameManager>();
@@ -43,6 +59,10 @@ public class BootstrapManager : MonoBehaviour
         DontDestroyOnLoad(go);
     }
 
+    /// <summary>
+    /// Создаёт SceneLoader, если его ещё нет в сцене, и помечает как DontDestroyOnLoad.
+    /// Обёртка над Unity SceneManager.
+    /// </summary>
     private static void CreateSceneLoader()
     {
         SceneLoader existing = FindFirstObjectByType<SceneLoader>();
@@ -57,6 +77,10 @@ public class BootstrapManager : MonoBehaviour
         DontDestroyOnLoad(go);
     }
 
+    /// <summary>
+    /// Создаёт EventBus, если его ещё нет в сцене, и помечает как DontDestroyOnLoad.
+    /// Реализует паттерн Event Bus / Observer.
+    /// </summary>
     private static void CreateEventBus()
     {
         EventBus existing = FindFirstObjectByType<EventBus>();
@@ -71,7 +95,11 @@ public class BootstrapManager : MonoBehaviour
         DontDestroyOnLoad(go);
     }
 
-    private void CreateInputManager()
+    /// <summary>
+    /// Создаёт InputManager, если его ещё нет в сцене, назначает ему InputActionAsset из Resources.
+    /// Связывает систему ввода Unity Input System с остальной архитектурой.
+    /// </summary>
+    private static void CreateInputManager()
     {
         InputManager existing = FindFirstObjectByType<InputManager>();
         if (existing != null)
@@ -83,27 +111,14 @@ public class BootstrapManager : MonoBehaviour
         GameObject go = new GameObject("InputManager");
         InputManager inputManager = go.AddComponent<InputManager>();
 
+        // Загружаем из Resources — работает и в редакторе, и в билде
         inputManager.inputActions = Resources.Load<InputActionAsset>("InputSystem_Actions");
 
         if (inputManager.inputActions == null)
         {
-            Debug.LogError("Failed to load InputActionAsset from Resources/InputSystem_Actions");
+            Debug.LogError("InputManager: Не удалось загрузить InputSystem_Actions! " +
+                "Убедитесь, что файл InputSystem_Actions.inputactions лежит в папке Assets/Resources/");
         }
-
-        DontDestroyOnLoad(go);
-    }
-
-    private void CreateScreenManager()
-    {
-        ScreenManager existing = FindFirstObjectByType<ScreenManager>();
-        if (existing != null)
-        {
-            DontDestroyOnLoad(existing.gameObject);
-            return;
-        }
-
-        GameObject go = new GameObject("ScreenManager");
-        ScreenManager screenManager = go.AddComponent<ScreenManager>();
 
         DontDestroyOnLoad(go);
     }

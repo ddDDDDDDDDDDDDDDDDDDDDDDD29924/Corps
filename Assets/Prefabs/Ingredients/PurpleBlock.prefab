@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2196678695791806751}
   - component: {fileID: 3074960433976924229}
   - component: {fileID: 8272342231898219033}
+  - component: {fileID: -6253014165173273319}
   m_Layer: 3
   m_Name: PurpleBlock
   m_TagString: Untagged
@@ -117,7 +118,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2325327869121997123}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 50
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -136,3 +137,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-6253014165173273319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2325327869121997123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b66cfa93443b14dba0e96bef993b09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
