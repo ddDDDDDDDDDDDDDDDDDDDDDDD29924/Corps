@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class IngredientBase : MonoBehaviour
 {
+    public IngredientData Data;
+
     private void OnCollisionEnter(Collision collision)
     {
         IngredientBase otherObject = collision.gameObject.GetComponent<IngredientBase>();
@@ -28,8 +30,13 @@ public class IngredientBase : MonoBehaviour
 
     private bool CheckMatch(RecipeData recipe, GameObject a, GameObject b)
     {
-        return (recipe.IngredientA.name == a.name && recipe.IngredientB.name == b.name) ||
-               (recipe.IngredientA.name == b.name && recipe.IngredientB.name == a.name);
+        IngredientBase RBaseA = recipe.IngredientA.GetComponent<IngredientBase>();
+        IngredientBase RBaseB = recipe.IngredientB.GetComponent<IngredientBase>();
+        IngredientBase ABase = a.GetComponent<IngredientBase>();
+        IngredientBase BBase = b.GetComponent<IngredientBase>();
+
+        return (RBaseA.Data.Type == ABase.Data.Type && RBaseB.Data.Type == BBase.Data.Type) ||
+               (RBaseA.Data.Type == BBase.Data.Type && RBaseB.Data.Type == ABase.Data.Type);
     }
 
     private bool CheckGameState()
